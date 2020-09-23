@@ -53,6 +53,7 @@ void ClientWidget::on_btnSend_clicked()
     tcpSocket->write(str.toUtf8().data());
 
     qDebug("client send data");
+    ui->textEditRead->clear();
 }
 
 void ClientWidget::on_btnClose_clicked()

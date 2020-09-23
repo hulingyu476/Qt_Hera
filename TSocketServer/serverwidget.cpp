@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-#define ESHAREPORT 8888
+#define ESHAREPORT 11451
 ServerWidget::ServerWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ServerWidget)
@@ -14,7 +14,7 @@ ServerWidget::ServerWidget(QWidget *parent) :
     tcpSocket = NULL;
 
     tcpServer = new QTcpServer(this);
-    tcpServer->listen(QHostAddress::Any,8888);
+    tcpServer->listen(QHostAddress::Any,11451);
 
     setWindowTitle("server:8888");
 
