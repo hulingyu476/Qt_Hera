@@ -12,14 +12,16 @@
 #include <QMutex>
 static QMutex mutex;
 
-#define LOGFILENAME "C:\\HHShare.log"
+#include <QDir>
+#include <QDebug>
 
+#define LOGFILENAME "D:\\HHShare.log"
 
 void customerMessageHandle(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     //Q_UNUSED(context)
     QDateTime _datatime = QDateTime::currentDateTime();
-    QString szDate = _datatime.toString();
+    QString szDate = _datatime.toString("yyyy-MM-dd hh:mm:ss ddd");
     QString txtMessage(szDate);
 
     switch (type)
@@ -50,8 +52,11 @@ void customerMessageHandle(QtMsgType type, const QMessageLogContext &context, co
     txtMessage.append(QString("<%1>").arg(context.line));
     txtMessage.append(msg);
 
+
     mutex.lock();
-    QFile outFile(LOGFILENAME);
+    QFile outFile("D:\\"+_datatime.toString("yyyyMMdd")+".log");
+    //QFile outFile(LOGFILENAME);
+
     outFile.open(QIODevice::WriteOnly | QIODevice::Append);
 
     QTextStream textStream(&outFile);
@@ -71,6 +76,12 @@ int main(int argc, char *argv[])
     qWarning("This is a warning message");
     qCritical("This is a critical message");
     //qFatal("This is a fatal message");
+
+
+    QString appPath = argv[0];
+    QDir appDir(appPath);
+    QString appName = appDir.dirName();
+    qDebug() << "appName=" << appName;
 
     MainWindow w;
     w.show();
