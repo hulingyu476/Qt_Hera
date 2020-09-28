@@ -2,7 +2,7 @@
 #define PLUSWINDOW_H
 
 #include <QWidget>
-#include <QTcpSocket>
+
 
 namespace Ui {
 class PlusWindow;
@@ -16,10 +16,11 @@ public:
     explicit PlusWindow(QWidget *parent = nullptr);
     ~PlusWindow();
 
-    void ConnectSDK();
 private:
     Ui::PlusWindow *ui;
-    QTcpSocket *tcpSocket;
+
+public:
+    void UpdateStatus(QString str);
 };
 
 #endif // PLUSWINDOW_H

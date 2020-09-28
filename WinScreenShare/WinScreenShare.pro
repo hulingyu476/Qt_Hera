@@ -11,10 +11,13 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    pluswindow.cpp
+    pluswindow.cpp \
+    socketnetwork.cpp
 
 HEADERS += \
-    pluswindow.h
+    esharecommand.h \
+    pluswindow.h \
+    socketnetwork.h
 
 FORMS += \
     pluswindow.ui
