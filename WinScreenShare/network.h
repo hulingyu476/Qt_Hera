@@ -1,7 +1,9 @@
-#ifndef SOCKETNETWORK_H
-#define SOCKETNETWORK_H
+#ifndef NETWORK_H
+#define NETWORK_H
 
 #include "pluswindow.h"
+#include "json.h"
+#include "eshare.h"
 
 #include <QObject>
 #include <QTcpSocket>
@@ -10,28 +12,35 @@
 
 
 
-class SocketNetwork : QObject
+class Network : QObject
 {
     Q_OBJECT
 public:
-    explicit SocketNetwork(QObject *parent = 0 );
-    virtual ~SocketNetwork(void);
+    explicit Network(QObject *parent = 0 );
+    virtual ~Network(void);
+
+    void InitCommand();
 
 public slots:
     void connectToSocket(QString ip, qint16 port);
-    void disconnect();
+    void disconnectFromSocket();
     void send(QString string);
     void send(QJsonDocument doc);
     void onSocketReadyRead();
 
+signals:
+    void received_socketdata(QByteArray array);
 
 private slots:
     void connected(void);
     void disconnected(void);
 
+
 private:
     QTcpSocket *tcpSocket;
     PlusWindow *plusWindow;
+    Eshare *eshare;
+//  Json *json;
 };
 
-#endif // SOCKETNETWORK_H
+#endif // NETWORK_H

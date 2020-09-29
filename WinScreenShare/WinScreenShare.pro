@@ -12,14 +12,17 @@ CONFIG += c++11
 Release:DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += \
+    eshare.cpp \
+    json.cpp \
     main.cpp \
-    pluswindow.cpp \
-    socketnetwork.cpp
+    network.cpp \
+    pluswindow.cpp
 
 HEADERS += \
-    esharecommand.h \
-    pluswindow.h \
-    socketnetwork.h
+    eshare.h \
+    json.h \
+    network.h \
+    pluswindow.h
 
 FORMS += \
     pluswindow.ui

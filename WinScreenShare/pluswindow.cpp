@@ -27,6 +27,18 @@ PlusWindow::~PlusWindow()
 void PlusWindow::UpdateStatus(QString str)
 {
     ui->textEdit->setText(str);
+
 }
 
+void PlusWindow::on_pushButtonPhone_clicked()
+{
 
+}
+
+void PlusWindow::Show_Receivedata(QByteArray array)
+{
+    qInfo().noquote() << array;
+    UpdateStatus(array);
+
+
+}

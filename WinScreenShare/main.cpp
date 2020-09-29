@@ -1,4 +1,4 @@
-#include "socketnetwork.h"
+#include "network.h"
 
 #include <QApplication>
 
@@ -10,10 +10,11 @@
 #include <QDateTime>
 #include <QTextBlock>
 #include <QMutex>
-static QMutex mutex;
 
 #include <QDir>
 #include <QDebug>
+
+static QMutex mutex;
 
 #define LOGFILENAME "D:\\HHShare.log"
 
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
 
     qInstallMessageHandler(customerMessageHandle);
 
-    qInfo("WinScreenShare");
+    qInfo("Start WinScreenShare");
     //qDebug("This is a debug message");
     //qWarning("This is a warning message");
     //qCritical("This is a critical message");
@@ -82,8 +83,7 @@ int main(int argc, char *argv[])
 
     //PlusWindow w;
     //w.show();
-   auto core = new SocketNetwork;
-
+   auto core = new Network;
    Q_UNUSED(core)
 
     return a.exec();

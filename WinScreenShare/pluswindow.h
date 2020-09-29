@@ -21,6 +21,10 @@ private:
 
 public:
     void UpdateStatus(QString str);
+
+private slots:
+    void on_pushButtonPhone_clicked();
+    void Show_Receivedata(QByteArray array);
 };
 
 #endif // PLUSWINDOW_H
