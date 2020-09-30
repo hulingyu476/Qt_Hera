@@ -2,11 +2,13 @@
 
 #include "eshare.h"
 
+#include <QNetworkInterface>
 #include <QHostAddress>
 #include <QJsonArray>
 #include <QDebug>
 
 #include <QThread>
+#include <QProcess>
 
 Network::Network(QObject *parent)
     : QObject(parent),
@@ -17,6 +19,7 @@ Network::Network(QObject *parent)
     plusWindow->show(); 
 
     connectToSocket(QHostAddress(QHostAddress::LocalHost).toString(),11451);
+    //connectToSocket(GetHostIpAddress(),11451);
 
     connect(tcpSocket, SIGNAL(connected()), this, SLOT(connected()));
     connect(tcpSocket, SIGNAL(disconnected()),this, SLOT(disconnected()));
@@ -27,6 +30,7 @@ Network::Network(QObject *parent)
     qDebug() << "[HHTINFO] Client Started";
 
     InitCommand();
+    //GetWifiSSIDname();  //tmptest
 }
 
 Network::~Network()
@@ -60,6 +64,10 @@ void Network::send(QString string)
 {
     qInfo() << "send string:" << string;
 
+    if(tcpSocket->state() != QTcpSocket::ConnectedState)
+    {
+        qInfo() << "Not ConnectedState, send failed:" << string;
+    }
     tcpSocket->write(string.toUtf8().data());
 
     /*
@@ -118,6 +126,55 @@ void Network::InitCommand()
     //send(eshare->SetFloatingBallVisibility(1));
 
     send(eshare->GetDeviceList());
+}
+
+QString Network::GetHostIpAddress()
+{
+    QString strIpAddress;
+    QList<QHostAddress> ipAddressList = QNetworkInterface::allAddresses();
+    int nListSize = ipAddressList.size();
+    //get first IPv4 address
+    for(int i =0; i < nListSize; ++i)
+    {
+        if( ipAddressList.at(i) != QHostAddress::LocalHost &&
+                ipAddressList.at(i).toIPv4Address())
+        {
+            strIpAddress = ipAddressList.at(i).toString();
+            if(strIpAddress.startsWith("192"))
+                break;
+        }
+    }
+
+    if( strIpAddress.isEmpty())
+    {
+        strIpAddress = QHostAddress(QHostAddress::LocalHost).toString();
+    }
+    qDebug() << "GetHostIpAddress" << strIpAddress;
+    return strIpAddress;
+}
+
+QString  Network::GetWifiSSIDname()
+{
+    QProcess p(0);
+    p.start("cmd", QStringList()<<"/c"<<"netsh wlan show interfaces");
+    p.waitForStarted();
+    p.waitForFinished();
+    QString strTemp=QString::fromLocal8Bit(p.readAllStandardOutput());
+    //qint16 nstrSize = strTemp.size();
+
+    QStringList strlist = strTemp.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+    qint16 nSize = strlist.size();
+    for (int i =0; i < nSize; i++)
+    {
+        QString strtmp = strlist[i].simplified();
+        if(strtmp.startsWith("SSID"))
+        {
+            //qDebug().noquote().nospace() << strtmp;
+            qDebug() << strtmp;
+            return strtmp;
+        }
+    }
+    return QString("SSID:Not Found");
 }
 
 
