@@ -4,7 +4,6 @@
 
 Json::Json()
 {
-    ;
 }
 
 QJsonObject Json::getJsonObjectFromString(const QString jsonString)
@@ -32,7 +31,7 @@ QJsonDocument Json::getJsonDocumentFromString(const QString jsonString)
 
     QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonString.toUtf8(),&jsonError);
 
-    if(jsonDocument.isNull()||(jsonError.error == QJsonParseError::NoError))
+    if(jsonDocument.isNull()||(jsonError.error != QJsonParseError::NoError))
     {
         qWarning() << "getJsonDocumentFromString "<< jsonString  << " <error code>:" << jsonError.errorString() ;
     }

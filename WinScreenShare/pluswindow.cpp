@@ -32,7 +32,7 @@ void PlusWindow::UpdateStatus(QString str)
 
 void PlusWindow::on_pushButtonPhone_clicked()
 {
-
+    ui->pushButtonPhone->setText("");
 }
 
 void PlusWindow::Show_Receivedata(QByteArray array)

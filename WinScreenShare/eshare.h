@@ -13,31 +13,45 @@
 #include <QString>
 #include <QList>
 
-typedef struct DeviceList
+struct DeviceList
 {
-   qint16 DeviceListCount;
-   QList<QString> deviceip;
-}ST_DEVICELIST;
+   qint16 devicelistcount;
+   QStringList deviceiplist;
+};
 
-typedef struct PasswdConfigs
+struct ClientIPList
+{
+   qint8 caststate;
+   QString clientip;
+};
+struct ClientList
+{
+   qint16 clientlistcount;
+   QList<ClientIPList> deviceiplist;
+};
+
+struct PasswdConfigs
 {
     qint8   ispwd;
     qint8   pwd;
-}PASSWDCONFIGS;
+};
 
-typedef struct DevPattern
+struct DevPattern
 {
     qint8   devpattern;
-    qint8   pincode;
-}DEVPATTERN;
+    QString   pincode;
+};
 
-typedef struct SdkLicense
+struct SdkLicense
 {
     qint8   license_status;
-    qint64  license_id;
+    QString  license_id;
+};
+struct SetLicense
+{
     QString license_word;
     qint8   license_result;
-}SDKLICENSE;
+};
 
 enum ClientActionType
 {
@@ -48,11 +62,11 @@ enum ClientActionType
     ActionInterrupt,
 };
 
-typedef struct ClientAction
+struct ConnectAction
 {
-    QString          clientName;
-    ClientActionType clientActionType;
-}CLIENTACTION;
+    QString  clientName;
+    qint8    clientAction;
+};
 
 enum FloatBallViewMode
 {
@@ -61,44 +75,62 @@ enum FloatBallViewMode
     AlwaysVisibility,
 };
 
-typedef struct EsharInfo
+struct EshareInfo
 {
-    ST_DEVICELIST       DeviceList;
+    DeviceList          devicelist;
     qint8               mirrorconfig;
     qint8               priviewconfig;
     QString             localdevicename;
+    qint8               changedevicenamestatus;
     qint64              mirrorhandler;
-    PASSWDCONFIGS       passwdconfigs;
+    PasswdConfigs       passwdconfigs;
     qint8               multiscreen;
+    DevPattern          devpattern;
     qint8               checklicense;
-    SDKLICENSE          SdkLicense;
+    SdkLicense          sdklicense;
+    SetLicense          setlicense;
     QString             qrCode;
     qint64              maincontrolhandler;
     qint8               maincontrolvisibility;
-    CLIENTACTION        ClientAction;
+    ConnectAction       connectaction;
+    ClientList          clientlist;
     qint64              floatingballhandler;
     qint8               floatingballvisibility;
-    qint64              settinglhandler;
+    qint64              settinghandler;
     qint8               settingvisibility;
     FloatBallViewMode   floatingballmode;
-}st_eshareinfo;
+};
 
 
 class Eshare
 {
 public:
+    EshareInfo eshareinfo;
     Eshare();
 //  Json *json;
+    void DataHandle(QByteArray array);
+
     QString GetDeviceList(qint16 cmdval=0);
-    QString GetClientList(qint16 cmdval=0);
+
     QString MirrorConfig(qint16 cmdval=0);
     QString PreviewConfig(qint16 cmdval=0);
+    QString ChangeDeviceName(QString cmdval);
+    QString GetMirrorHandler(QString cmdval);
+    QString SetMirrorPwd(qint16 cmdval=0, qint16 isPwd=1, QString pwd="123456"); //TBD
     QString SetMulitScreen(qint16 cmdval=0);
     QString SetDevPattern(qint16 cmdval=0);
     QString CheckLicense(qint16 cmdval=0);
+    QString SetLicense(QString cmdval);
+    QString GetQRCode(qint16 cmdval);
+    QString GetClientList(qint16 cmdval=0);
 
-    QString ChangeDeviceName(QString cmdval);
-    QString GetMirrorHandler(QString cmdval);
+    QString GetMainControlHandle(qint16 cmdval);
+    QString GetSettingHandle(qint16 cmdval);
+    QString GetFloatingBallHandle(qint16 cmdval);
+    QString SetMainControlVisibility(qint16 cmdval);
+    QString SetSettingVisibility(qint16 cmdval);
+    QString SetFloatingBallVisibility(qint16 cmdval);
+
 
 
 private:
@@ -111,7 +143,6 @@ private:
 //    QString strSetDevPattern        = "{\"SetDevPattern\":1}";
 //    QString strSetMulitScreen       = "{\"SetMulitScreen\":0}";
 //    QString strCheckLicense         = "{\"CheckLicense\":0}";
-
 
 };
 

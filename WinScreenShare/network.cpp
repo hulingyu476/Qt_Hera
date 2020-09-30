@@ -6,6 +6,7 @@
 #include <QJsonArray>
 #include <QDebug>
 
+#include <QThread>
 
 Network::Network(QObject *parent)
     : QObject(parent),
@@ -22,8 +23,6 @@ Network::Network(QObject *parent)
     connect(tcpSocket, SIGNAL(readyRead()),this, SLOT(onSocketReadyRead()));
 
     connect(this, SIGNAL(received_socketdata(QByteArray)), plusWindow, SLOT(Show_Receivedata(QByteArray)));
-
-
 
     qDebug() << "[HHTINFO] Client Started";
 
@@ -90,7 +89,7 @@ void Network::onSocketReadyRead()
         // plusWindow->UpdateStatus(array);
         //qDebug() << "[HHTINFO] emit";
          emit received_socketdata(array);
-
+         ReceivedDataHandle(array);
      }
 }
 
@@ -99,13 +98,29 @@ void Network::disconnected()
     tcpSocket->disconnectFromHost();
 }
 
+void Network::ReceivedDataHandle(QByteArray array)
+{
+   eshare->DataHandle(array);
+}
+
 void Network::InitCommand()
 {
     qDebug() << "[HHTINFO] InitCommand";
+    QThread::msleep(1);
     //send(eshare->GetDeviceList());
     //send(eshare->GetClientList());
-    send(eshare->CheckLicense());
+    //send(eshare->CheckLicense());
+
+    //0 is ng,same as other client; 1 2 mode is OK
+    //send(eshare->SetDevPattern(1));
+    //send(eshare->SetSettingVisibility(1));
+    //send(eshare->SetMainControlVisibility(1));
+    //send(eshare->SetFloatingBallVisibility(1));
+
+    send(eshare->GetDeviceList());
 }
+
+
 
 
 
