@@ -30,6 +30,18 @@ void PlusWindow::UpdateStatus(QString str)
 
 }
 
+void PlusWindow::UpdateSSIDandPasswd(QString ssid,QString passwd)
+{
+    QString str;
+    str +=QString::fromUtf8("将您的设备连接到");
+    str +="\n";
+    str +=QString::fromUtf8("接入: ")+ssid;
+    str +="\n";
+    str +=QString::fromUtf8("密码: ")+passwd;
+    ui->textEditWiFi->setText(str);
+
+}
+
 void PlusWindow::on_pushButtonPhone_clicked()
 {
     ui->pushButtonPhone->setText("");
@@ -39,6 +51,5 @@ void PlusWindow::Show_Receivedata(QByteArray array)
 {
     qInfo().noquote() << array;
     UpdateStatus(array);
-
 
 }

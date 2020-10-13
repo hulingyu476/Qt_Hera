@@ -21,7 +21,7 @@ private:
 
 public:
     void UpdateStatus(QString str);
-
+    void UpdateSSIDandPasswd(QString ssid, QString passwd);
 private slots:
     void on_pushButtonPhone_clicked();
     void Show_Receivedata(QByteArray array);

@@ -27,7 +27,7 @@ struct ClientIPList
 struct ClientList
 {
    qint16 clientlistcount;
-   QList<ClientIPList> deviceiplist;
+   QList<ClientIPList> clientiplist;
 };
 
 struct PasswdConfigs

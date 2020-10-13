@@ -167,21 +167,31 @@ void Eshare::DataHandle(QByteArray array)
                                 QJsonValue value = jsonObject.value("DeviceList");
                                 if(value.isArray())
                                 {
-                                    //qDebug() << "DeviceList :" << value.toArray();
+                                    //qDebug() << "DeviceList :" << value.toArray();//onlydebug
                                     QJsonArray array = value.toArray();
-                                    int nSize = array.size();
+                                    int nSize = array.size();                                   
                                     eshareinfo.devicelist.devicelistcount = nSize;
-                                    for (int i = 0; i < nSize; ++i)
+                                    for (int i = 0; i < nSize; i++)
                                     {
-                                        QJsonValue value = array.at(i);
-                                        if(value.isString())
-                                        {
-                                            eshareinfo.devicelist.deviceiplist << value.toString();
-                                            qDebug() << QString("DeviceList[%1]:%").arg(i).arg(value.toString());
+                                        QJsonValue arrayobject = array.at(i);
+
+                                       if(arrayobject.isObject())
+                                       {
+                                           qDebug() <<  arrayobject;//onlydebug
+                                           QJsonObject jsonObject = arrayobject.toObject();
+                                           if(jsonObject.contains("deviceIp"))
+                                           {
+                                               QJsonValue value = jsonObject.value("deviceIp");
+                                               if(value.isString())
+                                               {
+                                                  eshareinfo.devicelist.deviceiplist << value.toString();
+                                                  qDebug() << QString("DeviceList[%1]:%2").arg(i).arg(value.toString());
+                                               }
+                                           }
                                         }
                                     }
                                     qDebug() << "final ip";
-                                    qDebug() << eshareinfo.devicelist.deviceiplist;
+                                    qDebug().noquote() << eshareinfo.devicelist.deviceiplist;
                                 }
                             }
                             break;
@@ -304,44 +314,47 @@ void Eshare::DataHandle(QByteArray array)
                             }
                             break;
                         case 1018:  //  GetClientList
-                        if(jsonObject.contains("clientList"))
+                            if(jsonObject.contains("clientList"))
                             {
                                 QJsonValue value = jsonObject.value("clientList");
                                 if(value.isArray())
                                 {
-                                    //qDebug() << "DeviceList :" << value.toArray();
+
                                     QJsonArray array = value.toArray();
                                     int nSize = array.size();
                                     eshareinfo.clientlist.clientlistcount = nSize;
 
-                                    for (int i = 0; i < nSize; ++i)
+                                    for (int i = 0; i < nSize; i++)
                                     {
-                                        QJsonValue value = array.at(i);
-                                        if(value.isObject())
-                                        {
-                                            qint8 tmp_caststate = 0;
-                                            QString tmp_clientip;
+                                        QJsonValue arrayobject = array.at(i);
 
-                                            QJsonObject jsonObject = value.toObject();
-                                            if (jsonObject.contains("castState"))
-                                            {
-                                                QJsonValue value = jsonObject.value("castValue");
-                                                tmp_caststate = value.toVariant().toInt();
-                                            }
-                                            if (jsonObject.contains("clientIp"))
-                                            {
-                                                QJsonValue value = jsonObject.value("clientIp");
-                                                tmp_clientip  = value.toVariant().toString();
-                                            }
-                                            eshareinfo.clientlist.deviceiplist[i].caststate = tmp_caststate;
-                                            eshareinfo.clientlist.deviceiplist[i].clientip  = tmp_clientip;
-
-                                            qDebug() << QString("caststate=%1,IP=%2").arg(tmp_caststate).arg(tmp_clientip);
+                                       if(arrayobject.isObject())
+                                       {
+                                           qDebug() <<  arrayobject;//onlydebug
+                                           QJsonObject jsonObject = arrayobject.toObject();
+                                           ClientIPList iplist;
+                                           if(jsonObject.contains("clientIp"))
+                                           {
+                                               QJsonValue value = jsonObject.value("clientIp");
+                                               if(value.isString())
+                                               {
+                                                    iplist.clientip = value.toString();
+                                               }
+                                           }
+                                           if(jsonObject.contains("castState"))
+                                           {
+                                               QJsonValue value = jsonObject.value("castState");
+                                               if(value.isDouble())
+                                               {
+                                                    iplist.caststate = value.toVariant().toInt();
+                                               }
+                                           }
+                                           eshareinfo.clientlist.clientiplist << iplist;
                                         }
                                     }
                                 }
                             }
-                            break;
+                        break;
                         case 1019:  //  GetFloatingBallingHandler
                             {
                                 if(jsonObject.contains("floatingBall"))

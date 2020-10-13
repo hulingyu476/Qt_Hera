@@ -24,6 +24,7 @@ public:
     void ReceivedDataHandle(QByteArray array);
     QString GetHostIpAddress();
     QString GetWifiSSIDname();
+    QString GetWifiSSIDpasswd();
 public slots:
     void connectToSocket(QString ip, qint16 port);
     void disconnectFromSocket();
