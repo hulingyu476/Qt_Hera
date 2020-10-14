@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>res/ucspace.png</file>
+        <file>res/connect-androidap.svg</file>
+        <file>res/q-rcode-deault.svg</file>
+        <file>res/screen-mirror.svg</file>
+        <file>res/defaultqr.png</file>
+    </qresource>
+</RCC>
