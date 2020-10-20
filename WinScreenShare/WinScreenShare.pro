@@ -16,12 +16,14 @@ SOURCES += \
     json.cpp \
     main.cpp \
     network.cpp \
+    osinfo.cpp \
     pluswindow.cpp
 
 HEADERS += \
     eshare.h \
     json.h \
     network.h \
+    osinfo.h \
     pluswindow.h
 
 FORMS += \

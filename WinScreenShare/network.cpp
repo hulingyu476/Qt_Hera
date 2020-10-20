@@ -20,6 +20,7 @@ Network::Network(QObject *parent)
 
     connectToSocket(QHostAddress(QHostAddress::LocalHost).toString(),11451);
     //connectToSocket(GetHostIpAddress(),11451);
+    //connectToSocket(QString("192.168.31.109"),11451);
 
     connect(tcpSocket, SIGNAL(connected()), this, SLOT(connected()));
     connect(tcpSocket, SIGNAL(disconnected()),this, SLOT(disconnected()));
@@ -29,8 +30,7 @@ Network::Network(QObject *parent)
 
     qDebug() << "[HHTINFO] Client Started";
 
-    InitCommand();
-    GetWifiSSIDpasswd();  //tmptest
+    InitCommandList();
 }
 
 Network::~Network()
@@ -43,8 +43,8 @@ Network::~Network()
 void Network::connectToSocket(QString ip, qint16 port)
 {
     tcpSocket->connectToHost(QHostAddress(ip), port);
-
-    qDebug() << "[HHTINFO] Connect to server IP:" << ip << "port:"<< port;
+    if (tcpSocket->waitForConnected())
+        qDebug() << "[HHTINFO] Connect to server IP:" << ip << "port:"<< port;
 }
 
 void Network::connected()
@@ -58,6 +58,7 @@ void Network::connected()
 void Network::disconnectFromSocket()
 {
     qDebug() << "[HHTINFO] disconnectFromSocket";
+    tcpSocket->waitForBytesWritten();
 }
 
 void Network::send(QString string)
@@ -69,6 +70,9 @@ void Network::send(QString string)
         qInfo() << "Not ConnectedState, send failed:" << string;
     }
     tcpSocket->write(string.toUtf8().data());
+
+    tcpSocket->flush();
+
 
     /*
     QJsonDocument doc;
@@ -111,10 +115,14 @@ void Network::ReceivedDataHandle(QByteArray array)
    eshare->DataHandle(array);
 }
 
-void Network::InitCommand()
+void Network::InitCommandList()
 {
-    qDebug() << "[HHTINFO] InitCommand";
+    qDebug() << "[HHTINFO] InitCommandList";
+    send(eshare->SetDevPattern(1));
     //QThread::msleep(1);
+    send(eshare->GetDeviceList());
+
+
     //send(eshare->GetDeviceList());
     //send(eshare->GetClientList());
     //send(eshare->CheckLicense());
@@ -124,8 +132,6 @@ void Network::InitCommand()
     //send(eshare->SetSettingVisibility(1));
     //send(eshare->SetMainControlVisibility(1));
     //send(eshare->SetFloatingBallVisibility(1));
-
-    send(eshare->GetDeviceList());
 }
 
 QString Network::GetHostIpAddress()
@@ -153,80 +159,7 @@ QString Network::GetHostIpAddress()
     return strIpAddress;
 }
 
-QString  Network::GetWifiSSIDname()
-{
-    QProcess p(0);
-    p.start("cmd", QStringList()<<"/c"<<"netsh wlan show interfaces");
-    p.waitForStarted();
-    p.waitForFinished();
-    QString strTemp=QString::fromLocal8Bit(p.readAllStandardOutput());
-    //qint16 nstrSize = strTemp.size();
 
-    QStringList strlist = strTemp.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
-    qint16 nSize = strlist.size();
-    for (int i =0; i < nSize; i++)
-    {
-        QString strtmp = strlist[i].simplified();
-        if(strtmp.startsWith("SSID"))
-        {
-            QString ssid = strtmp.section(':',1,1).simplified();
-            qDebug() << "ssid:" << ssid;
-            return ssid;
-        }
-    }
-    return QString("SSID:Not Found");
-}
-
-QString  Network::GetWifiSSIDpasswd()
-{
-    QProcess p(0);
-    QStringList cmdlist;
-    QString cmdstr;
-    QString ssid = GetWifiSSIDname();
-    cmdstr += "netsh wlan show profile name =\"";
-    cmdstr += ssid;
-    cmdstr += "\" key = clear";
-    cmdlist <<"/c"<< cmdstr;
-
-    qDebug().noquote()<< cmdlist;
-
-    p.start("cmd", cmdlist);
-    p.waitForStarted();
-    p.waitForFinished();
-    QString strTemp=QString::fromLocal8Bit(p.readAllStandardOutput());
-    //qint16 nstrSize = strTemp.size();
-    QString passwdline;
-    QString passwd;
-    QStringList strlist = strTemp.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
-    qint16 nSize = strlist.size();
-    for (int i =0; i < nSize; i++)
-    {
-        QString strtmp = strlist[i].simplified();
-        //qDebug() << strtmp;
-         QLocale ql;
-        switch (ql.language())
-        {
-           case QLocale::Chinese:
-            if(strtmp.startsWith("关键内容"))
-            {
-                passwdline = strtmp;
-            }
-            break;
-        default:
-            if(strtmp.startsWith("Key Content"))
-            {
-                passwdline = strtmp;
-            }
-            break;
-        }
-    }
-    passwd = passwdline.section(':',1,1).simplified();
-    qDebug() << "passwd:" << passwd;
-
-    plusWindow->UpdateSSIDandPasswd(ssid,passwd); //update UI
-
-    return passwd;
-}
 
 
 

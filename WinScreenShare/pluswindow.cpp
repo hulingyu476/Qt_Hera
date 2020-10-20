@@ -5,6 +5,8 @@
 #include <QHostAddress>
 #include <QPixmap>
 
+
+
 PlusWindow::PlusWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PlusWindow)
@@ -44,6 +46,8 @@ void PlusWindow::InitUI()
 
 // hide status
     ui->textEditStatus->hide();
+
+    GetWifiInfo();
 }
 
 void PlusWindow::UpdateStatus(QString str)
@@ -52,7 +56,7 @@ void PlusWindow::UpdateStatus(QString str)
 
 }
 
-void PlusWindow::UpdateSSIDandPasswd(QString ssid,QString passwd)
+void PlusWindow::UpdateWifiInfo(QString ssid,QString passwd)
 {
     QString str;
     str +=QString::fromUtf8("1:将您的设备连接到");
@@ -62,6 +66,14 @@ void PlusWindow::UpdateSSIDandPasswd(QString ssid,QString passwd)
     str +=QString::fromUtf8("密码: ")+passwd;
     ui->labelWiFi->setText(str);
 
+}
+
+void PlusWindow::GetWifiInfo()
+{
+    //UpdateWifiInfo(OSInfo::GetWifiName(), OSInfo::GetWifiPasswd());
+    OSInfo *info = new OSInfo();
+    UpdateWifiInfo(info->GetWifiName(), info->GetWifiPasswd());
+    Q_UNUSED(info);
 }
 
 void PlusWindow::on_pushButtonPhone_clicked()

@@ -7,7 +7,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
-#include <QJsonDocument>
+//#include <QJsonDocument>
 #include <QTextStream>
 
 
@@ -19,12 +19,12 @@ public:
     explicit Network(QObject *parent = 0 );
     virtual ~Network(void);
 
-    void InitCommand();
+    void InitCommandList();
 
     void ReceivedDataHandle(QByteArray array);
     QString GetHostIpAddress();
-    QString GetWifiSSIDname();
-    QString GetWifiSSIDpasswd();
+    //QString GetWifiSSIDname();
+    //QString GetWifiSSIDpasswd();
 public slots:
     void connectToSocket(QString ip, qint16 port);
     void disconnectFromSocket();

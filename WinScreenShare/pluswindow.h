@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+#include "osinfo.h"
 
 namespace Ui {
 class PlusWindow;
@@ -21,8 +22,10 @@ private:
 
 public:
     void UpdateStatus(QString str);
-    void UpdateSSIDandPasswd(QString ssid, QString passwd);
+    void UpdateWifiInfo(QString ssid, QString passwd);
+    void GetWifiInfo();
     void InitUI();
+
 private slots:
     void on_pushButtonPhone_clicked();
     void Show_Receivedata(QByteArray array);
