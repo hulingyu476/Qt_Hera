@@ -125,8 +125,9 @@ void Network::InitCommandList()
 
     //send(eshare->GetDeviceList());
     //send(eshare->GetClientList());
-    //send(eshare->CheckLicense());
 
+    //send(eshare->SetLicense(QString("YOUNEEDKEY")));
+    send(eshare->CheckLicense());
     //0 is ng,same as other client; 1 2 mode is OK
     //send(eshare->SetDevPattern(1));
     //send(eshare->SetSettingVisibility(1));

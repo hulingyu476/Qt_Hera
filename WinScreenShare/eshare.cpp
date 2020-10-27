@@ -112,6 +112,14 @@ QString Eshare::CheckLicense(qint16 cmdval)
    return QString(QJsonDocument(jsonObject).toJson(QJsonDocument::Compact));
 }
 
+QString Eshare::SetLicense(QString cmdval)
+{
+   QJsonObject jsonObject;
+   jsonObject.insert("SetLicense", cmdval);
+
+   return QString(QJsonDocument(jsonObject).toJson(QJsonDocument::Compact));
+}
+
 QString Eshare::GetQRCode(qint16 cmdval)
 {
     QJsonObject jsonObject;
