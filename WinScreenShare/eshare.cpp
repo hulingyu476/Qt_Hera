@@ -152,6 +152,7 @@ QString Eshare::SetFloatingBallVisibility(qint16 cmdval)
 
 void Eshare::DataHandle(QByteArray array)
 {
+    //qInfo() << "DataHandle =" << array; //tmp
     QJsonParseError jsonError;
     QJsonObject jsonObject;
     QJsonDocument jsonDocument = QJsonDocument::fromJson(array,&jsonError);
@@ -185,7 +186,7 @@ void Eshare::DataHandle(QByteArray array)
 
                                        if(arrayobject.isObject())
                                        {
-                                           qDebug() <<  arrayobject;//onlydebug
+                                           //qDebug() <<  arrayobject;//onlydebug
                                            QJsonObject jsonObject = arrayobject.toObject();
                                            if(jsonObject.contains("deviceIp"))
                                            {
@@ -275,13 +276,13 @@ void Eshare::DataHandle(QByteArray array)
                             break;
                         case 1015:  //  GetQRCode
                             {
-                                if(jsonObject.contains("GetQRCode"))
+                                if(jsonObject.contains("qrCode"))
                                 {
-                                    QJsonValue value = jsonObject.value("GetQRCode");
+                                    QJsonValue value = jsonObject.value("qrCode");                      
                                     if(value.isString())
                                     {
                                        eshareinfo.qrCode = value.toString();
-                                       qDebug() << "qrCode :" << eshareinfo.qrCode;
+                                       qInfo() << "qrCode :" << eshareinfo.qrCode;
                                     }
                                 }
                             }

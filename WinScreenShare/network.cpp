@@ -51,8 +51,6 @@ void Network::connected()
 {
      qDebug() << "[HHTINFO] LocalHost connected";
      plusWindow->UpdateStatus("LocalHost Conneced");
-
-     //send("{\"SetDevPattern\":1}"); //only for test
 }
 
 void Network::disconnectFromSocket()
@@ -94,13 +92,13 @@ void Network::send(QJsonDocument doc)
 
 void Network::onSocketReadyRead()
 {
-     qDebug() << "[HHTINFO] ReadyRead";
      QByteArray array = tcpSocket->readAll();
+     qInfo() << "[HHTINFO] ReadyRead=" << array;
      if(!array.isEmpty()){
         //plusWindow->UpdateStatus("PIN:"+array.trimmed().mid(31,3)+array.trimmed().mid(35,3));
         // plusWindow->UpdateStatus(array);
         //qDebug() << "[HHTINFO] emit";
-         emit received_socketdata(array);
+         //emit received_socketdata(array);
          ReceivedDataHandle(array);
      }
 }
@@ -112,22 +110,24 @@ void Network::disconnected()
 
 void Network::ReceivedDataHandle(QByteArray array)
 {
+   //qInfo() << "goto eshare handle";
    eshare->DataHandle(array);
 }
 
 void Network::InitCommandList()
 {
     qDebug() << "[HHTINFO] InitCommandList";
-    send(eshare->SetDevPattern(1));
+    //send(eshare->SetDevPattern(1));
     //QThread::msleep(1);
-    send(eshare->GetDeviceList());
+    //send(eshare->GetDeviceList());
 
+    send(eshare->GetQRCode(0));
 
     //send(eshare->GetDeviceList());
     //send(eshare->GetClientList());
 
     //send(eshare->SetLicense(QString("YOUNEEDKEY")));
-    send(eshare->CheckLicense());
+    //send(eshare->CheckLicense());
     //0 is ng,same as other client; 1 2 mode is OK
     //send(eshare->SetDevPattern(1));
     //send(eshare->SetSettingVisibility(1));
