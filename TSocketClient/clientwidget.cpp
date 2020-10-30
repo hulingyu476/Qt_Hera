@@ -45,12 +45,20 @@ void ClientWidget::on_btnConnect_clicked()
     tcpSocket->connectToHost(QHostAddress(ip), port);
 
     qDebug("client connect socket server");
+
+
 }
 
 void ClientWidget::on_btnSend_clicked()
 {
     QString str = ui->textEditWrite->toPlainText();
     tcpSocket->write(str.toUtf8().data());
+   //QString str = QString("{\"CheckLicense\":0}");
+     //tcpSocket->write(str.toUtf8().data());
+    // tcpSocket->flush();
+   //QString str2 = QString("{\"GetQRCode\":0}");
+    // tcpSocket->write(str2.toUtf8().data());
+    tcpSocket->flush();
 
     qDebug("client send data");
     ui->textEditRead->clear();

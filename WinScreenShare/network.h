@@ -25,12 +25,12 @@ public:
     QString GetHostIpAddress();
     //QString GetWifiSSIDname();
     //QString GetWifiSSIDpasswd();
-public slots:
+public :
     void connectToSocket(QString ip, qint16 port);
     void disconnectFromSocket();
     void send(QString string);
     void send(QJsonDocument doc);
-    void onSocketReadyRead();
+
 
 signals:
     void received_socketdata(QByteArray array);
@@ -38,6 +38,7 @@ signals:
 private slots:
     void connected(void);
     void disconnected(void);
+    void onSocketReadyRead();
 
 
 private:

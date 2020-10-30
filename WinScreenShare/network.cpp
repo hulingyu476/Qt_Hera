@@ -69,7 +69,8 @@ void Network::send(QString string)
     }
     tcpSocket->write(string.toUtf8().data());
 
-    tcpSocket->flush();
+    //tcpSocket->flush();
+    tcpSocket->waitForBytesWritten();
 
 
     /*
@@ -101,16 +102,18 @@ void Network::onSocketReadyRead()
          //emit received_socketdata(array);
          ReceivedDataHandle(array);
      }
+
 }
 
 void Network::disconnected()
 {
     tcpSocket->disconnectFromHost();
+    tcpSocket->waitForDisconnected();
 }
 
 void Network::ReceivedDataHandle(QByteArray array)
 {
-   //qInfo() << "goto eshare handle";
+   //qInfo() << "goto eshare handle";  
    eshare->DataHandle(array);
 }
 
@@ -118,7 +121,7 @@ void Network::InitCommandList()
 {
     qDebug() << "[HHTINFO] InitCommandList";
     //send(eshare->SetDevPattern(1));
-    //QThread::msleep(1);
+    //QThread::msleep(2000); //delay 2s is ok
     //send(eshare->GetDeviceList());
 
     send(eshare->GetQRCode(0));
