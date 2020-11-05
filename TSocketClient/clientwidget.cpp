@@ -1,13 +1,20 @@
 #include "clientwidget.h"
 #include "ui_clientwidget.h"
+#include <QDebug>
 
 ClientWidget::ClientWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ClientWidget)
 {
     ui->setupUi(this);
+
+
+
     tcpSocket = new QTcpSocket(this);
-    setWindowTitle("client");
+    setWindowTitle(tr("client"));
+    ui->btnConnect->setText(tr("Connect"));
+    ui->btnClose->setText(tr("Close"));
+    ui->btnSend->setText(tr("Send"));
 
     connect(tcpSocket,&QTcpSocket::connected,
             [=]()
@@ -29,6 +36,14 @@ ClientWidget::ClientWidget(QWidget *parent) :
 ClientWidget::~ClientWidget()
 {
     delete ui;
+}
+
+void ClientWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange)
+    {
+
+    }
 }
 
 void ClientWidget::on_btnConnect_clicked()
@@ -68,4 +83,25 @@ void ClientWidget::on_btnClose_clicked()
 {
     tcpSocket->disconnectFromHost();
     tcpSocket->close();
+}
+
+
+void ClientWidget::on_pushButton_cn_clicked()
+{
+    qDebug() << "click cn";
+    QTranslator *enTrans = new QTranslator;
+    enTrans->load(":/new/prefix1/Chinese.qm");
+    qApp->installTranslator(enTrans);
+
+    this->ui->retranslateUi(this);
+}
+
+void ClientWidget::on_pushButton_en_clicked()
+{
+    qDebug() << "click en";
+    QTranslator *enTrans = new QTranslator;
+    enTrans->load(":/new/prefix1/English.qm");
+    qApp->installTranslator(enTrans);
+
+    this->ui->retranslateUi(this);
 }

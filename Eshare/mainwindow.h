@@ -18,7 +18,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    static void QRCode(QString string);
+    static void QRCode(QString);
 private:
     Ui::MainWindow *ui;
 

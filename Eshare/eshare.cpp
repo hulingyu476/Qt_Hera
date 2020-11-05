@@ -8,6 +8,8 @@
 #include <QJsonParseError>
 #include <QByteArray>
 
+#include <QThread>
+
 eshare::eshare(QObject *parent)
      : QObject(parent),
      tcpSocket(new QTcpSocket(this))
@@ -20,7 +22,6 @@ eshare::eshare(QObject *parent)
     connect(tcpSocket, SIGNAL(disconnected()),this, SLOT(disconnected()));
     connect(tcpSocket, SIGNAL(readyRead()),this, SLOT(slot_ReadyRead()));
 
-    //RegistGetQRCodeCallBack(test);
 }
 
 eshare::~eshare()
@@ -72,14 +73,14 @@ void eshare::slot_ReadyRead()
         DataHandle(array);
     }
 }
-void eshare::test(QString string)
-{
-    qDebug() << "test:" << string;
-}
+
+
 
 void eshare::RegistGetQRCodeCallBack(CallBack cbfun)
 {
+    GetQRCode();
     m_callback_GetQRCode = cbfun;
+    //QThread::msleep(2000);
 }
 
 QString eshare::GetDeviceList(qint16 cmdval)

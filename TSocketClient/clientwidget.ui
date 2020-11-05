@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>713</width>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -84,7 +84,7 @@
   <widget class="QTextEdit" name="textEditWrite">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>300</x>
      <y>10</y>
      <width>131</width>
      <height>101</height>
@@ -94,12 +94,38 @@
   <widget class="QTextEdit" name="textEditRead">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>180</y>
+     <x>300</x>
+     <y>170</y>
      <width>131</width>
      <height>101</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>270</y>
+     <width>211</width>
+     <height>191</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton_en">
+      <property name="text">
+       <string>English</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_cn">
+      <property name="text">
+       <string>chinese</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

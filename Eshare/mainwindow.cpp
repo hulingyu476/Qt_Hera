@@ -12,11 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     eshare *es = new eshare();
-
     es->RegistGetQRCodeCallBack(QRCode);
-
-    QThread::msleep(2000);
-    es->GetQRCode();
 
 }
 
@@ -27,7 +23,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::QRCode(QString string)
 {
-    qDebug() <<"MainWindow QRCode:"<< string;
+    qDebug() <<"MainWindow QRCode:" << string;
 }
 
 

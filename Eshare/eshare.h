@@ -56,6 +56,7 @@ signals:
 public:
     virtual void RegistGetQRCodeCallBack(CallBack cbfun); //注册回调函数
     static void test(QString string);
+
 private:
     CallBack m_callback_GetQRCode; //函数指针变量
 };
